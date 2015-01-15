@@ -257,7 +257,7 @@
             if (this.relations) {
                 // Iterate over `this.relations` and `set` model and collection values
                 // if `relations` are available.
-                _.each(this.relations, function (relation) {
+                _.each(_.result(this, 'relations'), function (relation) {
                     var relationKey = relation.key,
                         activationContext = relation.scope || root,
                         relatedModel = this._transformRelatedModel(relation, attributes),
@@ -512,7 +512,7 @@
                 this._pendingEvents = [];
 
                 // Traverse down the object graph and call process pending events on sub-trees
-                _.each(this.relations, function (relation) {
+                _.each(_.result(this, 'relations'), function (relation) {
                     var val = this.attributes[relation.key];
                     val && val._processPendingEvents && val._processPendingEvents();
                 }, this);
@@ -614,7 +614,7 @@
                 // If `this.relations` is defined, iterate through each `relation`
                 // and added it's json representation to parents' json representation.
                 if (this.relations) {
-                    _.each(this.relations, function (relation) {
+                    _.each(_.result(this, 'relations'), function (relation) {
                         var key = relation.key,
                             remoteKey = relation.remoteKey,
                             attr = this.attributes[key],
@@ -659,7 +659,7 @@
         cleanup:function (options) {
             options = options || {};
 
-            _.each(this.relations, function (relation) {
+            _.each(_.result(this, 'relations'), function (relation) {
                 var val = this.attributes[relation.key];
                 if(val) {
                     val._proxyCallback && val.off("all", val._proxyCallback, this);
@@ -771,7 +771,7 @@
         //Iterate over collection's parents
         _.find(parents, function (parent) {
             //Iterate over relations
-            relation = _.find(parent.relations, function (rel) {
+            relation = _.find(_.result(parent, 'relations'), function (rel) {
                 return parent.get(rel.key) === target;
             }, this);
             if (relation) {
